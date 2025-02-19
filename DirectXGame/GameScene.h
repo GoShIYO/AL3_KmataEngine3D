@@ -1,5 +1,6 @@
 #pragma once
 #include <KamataEngine.h>
+#include<vector>
 
 namespace KamataEngine {
 /// <summary>
@@ -41,6 +42,11 @@ private: // メンバ変数
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
+	Model* model_ = nullptr;
+	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
+	DebugCamera* debugCamera_ = nullptr;
+	Camera camera_;
+	bool isDebugCameraActive_ = false;
 };
 
 } // namespace KamataEngine
