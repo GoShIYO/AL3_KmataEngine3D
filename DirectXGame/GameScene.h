@@ -43,9 +43,8 @@ private: // メンバ変数
 	/// ゲームシーン用
 	/// </summary>
 	Player* player_ = nullptr;
-	DebugCamera* debugCamera_ = nullptr;
 	uint32_t textureHandle_ = 0;
-	Camera camera_;
+	Camera* camera_ = nullptr;
 };
 
 } // namespace KamataEngine

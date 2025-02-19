@@ -8,6 +8,7 @@ GameScene::GameScene() {}
 
 GameScene::~GameScene() {
 	delete player_;
+	delete camera_;
 }
 
 void GameScene::Initialize() {
@@ -15,10 +16,11 @@ void GameScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
-	camera_.Initialize();
+	camera_ = new Camera();
+    camera_->Initialize();
 	textureHandle_ = TextureManager::Load("uvChecker.png");
 	player_ = new Player();
-	player_->Initialize(Model::Create(), textureHandle_, &camera_);
+	player_->Initialize(Model::Create(), textureHandle_, camera_);
 }
 
 void GameScene::Update() {
