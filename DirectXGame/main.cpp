@@ -1,3 +1,4 @@
+#include "GameScene.h"
 #include <KamataEngine.h>
 #include"GameScene.h"
 

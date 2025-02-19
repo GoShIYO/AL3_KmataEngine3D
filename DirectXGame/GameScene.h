@@ -41,7 +41,7 @@ private: // メンバ変数
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
-	
+
 	uint32_t textureHandle_;				// テクスチャハンドル
 	Sprite* sprite_ = nullptr;				// スプライト
 	Model* model_ = nullptr;				// モデル
@@ -52,6 +52,7 @@ private: // メンバ変数
 	DebugCamera* debugCamera_ = nullptr;	// デバッグカメラ
 
 	float inputFloat3[3] = {0};
+
 };
 
 } // namespace KamataEngine

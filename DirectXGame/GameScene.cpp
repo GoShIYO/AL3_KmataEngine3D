@@ -5,11 +5,15 @@ using namespace KamataEngine;
 
 GameScene::GameScene() {}
 
+
 GameScene::~GameScene() {
 	delete sprite_;
 	delete model_;
 	delete debugCamera_;
 }
+
+GameScene::~GameScene() {}
+
 
 void GameScene::Initialize() {
 
@@ -66,6 +70,11 @@ void GameScene::Update() {
 #endif // _DEBUG
 	debugCamera_->Update();	
 }
+=======
+}
+
+void GameScene::Update() {}
+
 
 void GameScene::Draw() {
 
@@ -93,7 +102,9 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
+
 	model_->Draw(worldTransform_, debugCamera_->GetCamera(), textureHandle_);
+
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
@@ -123,7 +134,9 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
+
 	sprite_->Draw();
+
 	// スプライト描画後処理
 	Sprite::PostDraw();
 
