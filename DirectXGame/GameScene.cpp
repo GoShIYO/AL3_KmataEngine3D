@@ -7,6 +7,8 @@ GameScene::GameScene() {}
 
 GameScene::~GameScene() {
 	delete model_;
+	delete modelSkydome_;
+	delete player_;
 	for (auto& worldTransformLine : worldTransformBlocks_) {
 		for (auto worldTransformBlock : worldTransformLine) {
 			delete worldTransformBlock;
@@ -21,11 +23,16 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
-	srand(unsigned int(time(nullptr)));
+	srand(unsigned int(time(nullptr)));	
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
-
 	camera_.Initialize();
 	model_ = Model::Create();
+    modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	textureHandle_ = TextureManager::Load("uvChecker.png");
+	player_ = new Player();
+	player_->Initialize(model_, textureHandle_, &camera_);
+	skydome_ = new Skydome();
+	skydome_->Initialize(modelSkydome_, &camera_);
 	// 要素数
 	const uint32_t kNumBlockVirtical = 10;
 	const uint32_t kNumBlockHorizontal = 20;
@@ -65,11 +72,18 @@ void GameScene::Update() {
 				continue;
 			}
 			worldTransformBlock->matWorld_ = {
-			    1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, worldTransformBlock->translation_.x, worldTransformBlock->translation_.y, worldTransformBlock->translation_.z,
-			    1.0f};
+			    1.0f, 0.0f, 0.0f, 0.0f, 
+				0.0f, 1.0f, 0.0f, 0.0f, 
+				0.0f, 0.0f, 1.0f, 0.0f,
+				worldTransformBlock->translation_.x, worldTransformBlock->translation_.y, worldTransformBlock->translation_.z,
+			    1.0f
+			};
 			worldTransformBlock->TransferMatrix();
 		}
 	}
+
+	player_->Update();
+	skydome_->Update();
 #ifdef _DEBUG
 	// デバッグカメラの有効/無効
 	if (input_->TriggerKey(DIK_Z)) {
@@ -85,6 +99,9 @@ void GameScene::Update() {
 	} else {
 		camera_.UpdateMatrix();
 	}
+	ImGui::Begin("frame");
+    ImGui::Text("FPS: %f", ImGui::GetIO().Framerate);
+    ImGui::End();
 }
 
 void GameScene::Draw() {
@@ -113,6 +130,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
+	skydome_->Draw();
 	for (auto& worldTransformLine : worldTransformBlocks_) {
 		for (auto worldTransformBlock : worldTransformLine) {
 			if (!worldTransformBlock) {
@@ -121,6 +139,8 @@ void GameScene::Draw() {
 			model_->Draw(*worldTransformBlock, camera_);
 		}
 	}
+	
+    player_->Draw();
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion

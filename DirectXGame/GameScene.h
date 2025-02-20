@@ -1,6 +1,8 @@
 #pragma once
 #include <KamataEngine.h>
 #include<vector>
+#include"Player.h"
+#include"Skydome.h"
 
 namespace KamataEngine {
 /// <summary>
@@ -42,7 +44,11 @@ private: // メンバ変数
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
+	Player* player_ = nullptr;
+	Skydome* skydome_ = nullptr;
+	uint32_t textureHandle_ = 0;
 	Model* model_ = nullptr;
+	Model* modelSkydome_ = nullptr;
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 	DebugCamera* debugCamera_ = nullptr;
 	Camera camera_;
