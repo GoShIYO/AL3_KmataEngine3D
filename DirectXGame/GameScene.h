@@ -1,5 +1,6 @@
 #pragma once
 #include <KamataEngine.h>
+#include"Player.h"
 
 namespace KamataEngine {
 /// <summary>
@@ -41,6 +42,9 @@ private: // メンバ変数
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
+	Player* player_ = nullptr;
+	uint32_t textureHandle_ = 0;
+	Camera* camera_ = nullptr;
 };
 
 } // namespace KamataEngine
