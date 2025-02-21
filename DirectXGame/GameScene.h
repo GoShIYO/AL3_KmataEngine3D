@@ -1,5 +1,9 @@
 #pragma once
 #include <KamataEngine.h>
+#include<vector>
+#include"Player.h"
+#include"Skydome.h"
+#include"MapChipField.h"
 
 namespace KamataEngine {
 /// <summary>
@@ -33,6 +37,8 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	void GenerateBlocks();
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -41,6 +47,17 @@ private: // メンバ変数
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
+	Player* player_ = nullptr;
+	Skydome* skydome_ = nullptr;
+	uint32_t textureHandle_ = 0;
+	Model* model_ = nullptr;
+	Model* modelSkydome_ = nullptr;
+	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
+	DebugCamera* debugCamera_ = nullptr;
+	Camera camera_;
+	bool isDebugCameraActive_ = false;
+
+	MapChipField* mapChipField_ = nullptr;
 };
 
 } // namespace KamataEngine
