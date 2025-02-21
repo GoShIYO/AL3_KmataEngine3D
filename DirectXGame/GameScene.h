@@ -3,6 +3,7 @@
 #include<vector>
 #include"Player.h"
 #include"Skydome.h"
+#include"MapChipField.h"
 
 namespace KamataEngine {
 /// <summary>
@@ -36,6 +37,8 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	void GenerateBlocks();
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -53,6 +56,8 @@ private: // メンバ変数
 	DebugCamera* debugCamera_ = nullptr;
 	Camera camera_;
 	bool isDebugCameraActive_ = false;
+
+	MapChipField* mapChipField_ = nullptr;
 };
 
 } // namespace KamataEngine
