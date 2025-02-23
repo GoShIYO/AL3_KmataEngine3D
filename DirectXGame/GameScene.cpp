@@ -29,13 +29,15 @@ void GameScene::Initialize() {
 	camera_.Initialize();
 	model_ = Model::Create();
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
-	textureHandle_ = TextureManager::Load("uvChecker.png");
-	player_ = new Player();
-	player_->Initialize(model_, textureHandle_, &camera_);
-	skydome_ = new Skydome();
-	skydome_->Initialize(modelSkydome_, &camera_);
 	mapChipField_ = new MapChipField();
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
+	textureHandle_ = TextureManager::Load("uvChecker.png");
+	player_ = new Player();
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 17);
+	player_->Initialize(model_, &camera_, playerPosition);
+	skydome_ = new Skydome();
+	skydome_->Initialize(modelSkydome_, &camera_);
+	
 	GenerateBlocks();
 }
 
