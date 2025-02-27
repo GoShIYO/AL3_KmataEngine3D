@@ -7,6 +7,7 @@ GameScene::GameScene() {}
 
 GameScene::~GameScene() {
 	delete model_;
+	delete playerModel_;
 	delete modelSkydome_;
 	delete player_;
 	delete mapChipField_;
@@ -26,15 +27,21 @@ void GameScene::Initialize() {
 
 	srand(unsigned int(time(nullptr)));
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
-	camera_.Initialize();
+	camera_.Initialize();	
 	model_ = Model::Create();
+	playerModel_ = Model::CreateFromOBJ("teruteru", true);
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 	mapChipField_ = new MapChipField();
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
 	textureHandle_ = TextureManager::Load("uvChecker.png");
 	player_ = new Player();
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 17);
-	player_->Initialize(model_, &camera_, playerPosition);
+	player_->Initialize(playerModel_, &camera_, playerPosition);
+
+	cameraController_.Initialize(&camera_);
+	cameraController_.SetTarget(player_);
+	cameraController_.Reset();
+
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_, &camera_);
 	
@@ -79,6 +86,7 @@ void GameScene::Update() {
 	} else {
 		camera_.UpdateMatrix();
 	}
+	cameraController_.Update();
 }
 
 void GameScene::Draw() {

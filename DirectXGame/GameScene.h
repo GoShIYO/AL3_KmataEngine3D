@@ -4,6 +4,7 @@
 #include"Player.h"
 #include"Skydome.h"
 #include"MapChipField.h"
+#include"CameraController.h"
 
 namespace KamataEngine {
 /// <summary>
@@ -51,10 +52,12 @@ private: // メンバ変数
 	Skydome* skydome_ = nullptr;
 	uint32_t textureHandle_ = 0;
 	Model* model_ = nullptr;
+	Model* playerModel_ = nullptr;
 	Model* modelSkydome_ = nullptr;
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 	DebugCamera* debugCamera_ = nullptr;
 	Camera camera_;
+	CameraController cameraController_;
 	bool isDebugCameraActive_ = false;
 
 	MapChipField* mapChipField_ = nullptr;
