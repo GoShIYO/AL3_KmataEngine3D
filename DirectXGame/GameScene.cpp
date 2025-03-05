@@ -29,7 +29,7 @@ void GameScene::Initialize() {
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 	camera_.Initialize();	
 	model_ = Model::Create();
-	playerModel_ = Model::CreateFromOBJ("teruteru", true);
+	playerModel_ = Model::CreateFromOBJ("player", true);
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 	mapChipField_ = new MapChipField();
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
@@ -37,7 +37,7 @@ void GameScene::Initialize() {
 	player_ = new Player();
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 17);
 	player_->Initialize(playerModel_, &camera_, playerPosition);
-
+	player_->SetMapChipField(mapChipField_);
 	cameraController_.Initialize(&camera_);
 	cameraController_.SetTarget(player_);
 	cameraController_.Reset();
@@ -159,7 +159,7 @@ void GameScene::GenerateBlocks() {
 	// ブロックの生成
 	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
 		for (uint32_t j = 0; j < numBlockHorizontal; ++j) {
-			if (mapChipField_->GetMapChipTypeIndex(j, i) == MapChipType::kBlock) {
+			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock) {
 				WorldTransform* worldTransform = new WorldTransform();
 				worldTransform->Initialize();
 				worldTransformBlocks_[i][j] = worldTransform;
