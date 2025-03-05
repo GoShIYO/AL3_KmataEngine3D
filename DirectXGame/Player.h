@@ -45,8 +45,8 @@ private:
 	static inline const float kTimeTurn = 0.3f;
 	//ジャンプ用変数
 	bool onGround_ = true;
-	static inline const float kGravityAcceleration = 0.0098f;
+	static inline const float kGravityAcceleration = 0.005f;
 	static inline const float kLimitFallSpeed = 0.5f;
-	static inline const float kJumpAcceleration = 1.0f;
+	static inline const float kJumpAcceleration = 0.5f;
 
 };
