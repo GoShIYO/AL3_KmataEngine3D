@@ -2,8 +2,6 @@
 #include<KamataEngine.h>
 using namespace KamataEngine;
 
-
-
 class Player;
 class CameraController {
 public:
@@ -28,10 +26,10 @@ public:
 private:
 	Camera* camera_;
 	Player* target_;
-	Vector3 targetOffset_ = {0, 0, -20.0f};
-	Rect movebleArea_ = {0, 100, 0, 100};
-	Vector3 targetPos_ ;
+	Vector3 targetOffset_ = {0, 0, -25.0f};
+	Rect movebleArea_ = {17, 180, 9, 40};
+	Vector3 targetPos_;
 	static inline const float kInterpolationRate = 0.1f;
-	static inline const float kVelocityBias = 0.5f;
-	static inline const Rect margin = {0, 50.0f, 0,50.0f};
+	static inline const float kVelocityBias = 3.0f;
+	static inline const Rect margin = {-10, 10, 0, 5};
 };

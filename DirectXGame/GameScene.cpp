@@ -7,7 +7,7 @@ GameScene::GameScene() {}
 
 GameScene::~GameScene() {
 	delete model_;
-	delete playerModel_;
+	delete modelBlock_;
 	delete modelSkydome_;
 	delete player_;
 	delete mapChipField_;
@@ -28,15 +28,21 @@ void GameScene::Initialize() {
 	srand(unsigned int(time(nullptr)));
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 	camera_.Initialize();	
-	model_ = Model::Create();
-	playerModel_ = Model::CreateFromOBJ("player", true);
+	// モデル
+	model_ = Model::CreateFromOBJ("player", true);
+	modelBlock_ = Model::Create();
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	// マップチップ
 	mapChipField_ = new MapChipField();
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
-	textureHandle_ = TextureManager::Load("uvChecker.png");
+	// テクスチャ
+	playerTextureHandle_ = TextureManager::Load("./Resources/player/head.png");
+	blockTextureHandle_ = TextureManager::Load("block.png");
+	// プレイヤー
 	player_ = new Player();
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 17);
-	player_->Initialize(playerModel_, &camera_, playerPosition);
+	player_->Initialize(model_, &camera_, playerPosition);
+
 	player_->SetMapChipField(mapChipField_);
 	cameraController_.Initialize(&camera_);
 	cameraController_.SetTarget(player_);
@@ -121,7 +127,7 @@ void GameScene::Draw() {
 			if (!worldTransformBlock) {
 				continue;
 			}
-			model_->Draw(*worldTransformBlock, camera_);
+			modelBlock_->Draw(*worldTransformBlock, camera_,blockTextureHandle_);
 		}
 	}
 
