@@ -15,18 +15,9 @@ void Player::Initialize(Model* model, Camera* camera, const Vector3& position) {
 }
 
 void Player::Update() {
-	bool landing = false;
-
-	if (velocity_.y < 0.0f) {
-		if (worldTransform_.translation_.y <= 2.0f) {
-			landing = true;
-		}
-	}
-	
 	if (onGround_) {
-		if (velocity_.y > 0.0f) {
-			onGround_ = false;
-		}
+		// 移動入力
+		// 左右移動操作
 		if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT)) {
 			Vector3 acceleration = {};
 			if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
@@ -34,8 +25,8 @@ void Player::Update() {
 					velocity_.x *= (1.0f - kAttenuation);
 				}
 				acceleration.x += kAcceleration;
-				if (lrDirection_ != LRdirection::kRight) {
-					lrDirection_ = LRdirection::kRight;
+				if (lrDirection_ != LRDirection::kRight) {
+					lrDirection_ = LRDirection::kRight;
 					turnFirstRotationY_ = worldTransform_.rotation_.y;
 					turnTimer_ = kTimeTurn;
 				}
@@ -44,8 +35,8 @@ void Player::Update() {
 					velocity_.x *= (1.0f - kAttenuation);
 				}
 				acceleration.x -= kAcceleration;
-				if (lrDirection_ != LRdirection::kLeft) {
-					lrDirection_ = LRdirection::kLeft;
+				if (lrDirection_ != LRDirection::kLeft) {
+					lrDirection_ = LRDirection::kLeft;
 					turnFirstRotationY_ = worldTransform_.rotation_.y;
 					turnTimer_ = kTimeTurn;
 				}
@@ -55,26 +46,45 @@ void Player::Update() {
 		} else {
 			velocity_.x *= (1.0f - kAttenuation);
 		}
-		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
-			velocity_ += Vector3(0.0f, kJumpAcceleration, 0.0f);
+		if (Input::GetInstance()->PushKey(DIK_UP)) {
+			velocity_ += Vector3(0, kJumpAcceleration, 0);
 		}
 	} else {
-		velocity_ += Vector3(0.0f, -kGravityAcceleration , 0.0f);
-		velocity_.y = std::clamp(velocity_.y, -kLimitFallSpeed, 0.0f);
-		if (landing) {
-			worldTransform_.translation_.y = 2.0f;
-			velocity_.x *= (1.0f - kAttenuation);
-			velocity_.y = 0.0f;
-			onGround_ = true;
+		velocity_ += Vector3(0, -kGravityAcceleration, 0);
+		// 落下速度制限
+		velocity_.y = std::max(velocity_.y, -kLimitFallSpeed);
+	}
+
+	// 着地フラグ
+	bool landing = false;
+
+	// 下降中？
+	if (velocity_.y < 0) {
+		// y座標が地面いかになったら着地
+		if (worldTransform_.translation_.y <= 2.0f) {
+			landing = true;
 		}
 	}
 
-	ImGui::Begin("Player");
-	ImGui::SliderFloat("x", &worldTransform_.translation_.x, -100.0f, 100.0f);
-	ImGui::SliderFloat("y", &worldTransform_.translation_.y, -100.0f, 100.0f);
-	ImGui::SliderFloat("z", &worldTransform_.translation_.z, -100.0f, 100.0f);
-	ImGui::End();
-
+	if (onGround_) {
+		// ジャンプ開始
+		if (velocity_.y > 0.0f) {
+			// 空中状態移行
+			onGround_ = false;
+		}
+	} else {
+		// 着地
+		if (landing) {
+			// めりこみ排斥
+			worldTransform_.translation_.y = 2.0f;
+			// 摩擦で横方向速度が減衰する
+			velocity_.x *= (1.0f - kAttenuation);
+			// 下方向速度をセット
+			velocity_.y = 0.0f;
+			// 接地状態に移行
+			onGround_ = true;
+		}
+	}
 	if (turnTimer_ > 0.0f) {
 		turnTimer_ -= 1.0f / 60.0f;
 

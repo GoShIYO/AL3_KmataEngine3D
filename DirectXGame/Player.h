@@ -2,7 +2,7 @@
 #include <KamataEngine.h>
 using namespace KamataEngine;
 
-enum class LRdirection {
+enum class LRDirection {
 	kRight,
 	kLeft
 };
@@ -39,14 +39,14 @@ private:
 	static inline const float kAcceleration = 0.1f;
 	const float kAttenuation = 0.2f;
 	const float kLimitRunSpeed = 0.5f;
-	LRdirection lrDirection_ = LRdirection::kRight;
+	LRDirection lrDirection_ = LRDirection::kRight;
 	float turnFirstRotationY_ = 0.0f;
 	float turnTimer_ = 0.0f;
 	static inline const float kTimeTurn = 0.3f;
 	//ジャンプ用変数
 	bool onGround_ = true;
-	static inline const float kGravityAcceleration = 0.005f;
+	static inline const float kGravityAcceleration = 0.05f;
 	static inline const float kLimitFallSpeed = 0.5f;
-	static inline const float kJumpAcceleration = 0.5f;
+	static inline const float kJumpAcceleration = 0.7f;
 
 };

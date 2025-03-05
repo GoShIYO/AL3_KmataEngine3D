@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include"MatrixFunc.h"
 #include <cassert>
 
 using namespace KamataEngine;
@@ -7,7 +8,7 @@ GameScene::GameScene() {}
 
 GameScene::~GameScene() {
 	delete model_;
-	delete playerModel_;
+	delete modelBlock_;
 	delete modelSkydome_;
 	delete player_;
 	delete mapChipField_;
@@ -28,23 +29,29 @@ void GameScene::Initialize() {
 	srand(unsigned int(time(nullptr)));
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 	camera_.Initialize();	
-	model_ = Model::Create();
-	playerModel_ = Model::CreateFromOBJ("teruteru", true);
+	// モデル
+	model_ = Model::CreateFromOBJ("player", true);
+	modelBlock_ = Model::Create();
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	// マップチップ
 	mapChipField_ = new MapChipField();
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
-	textureHandle_ = TextureManager::Load("uvChecker.png");
+	// テクスチャ
+	playerTextureHandle_ = TextureManager::Load("./Resources/player/head.png");
+	blockTextureHandle_ = TextureManager::Load("block.png");
+	// プレイヤー
 	player_ = new Player();
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 17);
-	player_->Initialize(playerModel_, &camera_, playerPosition);
+	player_->Initialize(model_, &camera_, playerPosition);
 
 	cameraController_.Initialize(&camera_);
 	cameraController_.SetTarget(player_);
 	cameraController_.Reset();
 
+	// スカイドーム
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_, &camera_);
-	
+	// ブロック
 	GenerateBlocks();
 }
 
@@ -55,12 +62,7 @@ void GameScene::Update() {
 			if (!worldTransformBlock) {
 				continue;
 			}
-			worldTransformBlock->matWorld_ = {
-			    1.0f, 0.0f, 0.0f, 0.0f, 
-				0.0f, 1.0f, 0.0f, 0.0f, 
-				0.0f, 0.0f, 1.0f, 0.0f, 
-				worldTransformBlock->translation_.x, worldTransformBlock->translation_.y, worldTransformBlock->translation_.z,
-			    1.0f};
+			worldTransformBlock->matWorld_ = MakeAffineMatrix({1.0f, 1.0f, 1.0f}, {0, 0, 0}, worldTransformBlock->translation_);
 			worldTransformBlock->TransferMatrix();
 		}
 	}
@@ -121,7 +123,7 @@ void GameScene::Draw() {
 			if (!worldTransformBlock) {
 				continue;
 			}
-			model_->Draw(*worldTransformBlock, camera_);
+			modelBlock_->Draw(*worldTransformBlock, camera_, blockTextureHandle_);
 		}
 	}
 
