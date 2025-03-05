@@ -11,12 +11,6 @@ void CameraController::Update() {
 	targetPos_ = targetWorldTransform.translation_ + targetOffset_ + target_->GetVelocity() * kVelocityBias;
 	camera_->translation_ = Lerp(camera_->translation_, targetPos_, kInterpolationRate);
 
-	ImGui::Begin("margin");
-	ImGui::DragFloat("left", &margin.left, 1.0f);
-    ImGui::DragFloat("right", &margin.right, 1.0f);
-    ImGui::DragFloat("bottom", &margin.bottom, 1.0f);
-    ImGui::DragFloat("top", &margin.top, 1.0f);
-    ImGui::End();
 	camera_->translation_.x = std::clamp(camera_->translation_.x, target_->GetWorldTransform().translation_.x + margin.left, target_->GetWorldTransform().translation_.x + margin.right);
 	camera_->translation_.y = std::clamp(camera_->translation_.y, target_->GetWorldTransform().translation_.y + margin.bottom, target_->GetWorldTransform().translation_.y + margin.top);
 
