@@ -7,6 +7,7 @@ GameScene::GameScene() {}
 
 GameScene::~GameScene() {
 	delete model_;
+    delete modelBlock_;
 	delete modelSkydome_;
 	delete player_;
 	delete mapChipField_;
