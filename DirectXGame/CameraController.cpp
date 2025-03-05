@@ -15,6 +15,12 @@ void CameraController::Update() {
 	camera_->translation_.x = std::clamp(camera_->translation_.x, targetPos_.x + margin.left, targetPos_.x + margin.right);
 	camera_->translation_.y = std::clamp(camera_->translation_.y, targetPos_.y + margin.bottom, targetPos_.y + margin.top);
 
+	camera_->translation_.x = std::max(camera_->translation_.x, movebleArea_.left);
+	camera_->translation_.x = std::min(camera_->translation_.x, movebleArea_.right);
+	
+	camera_->translation_.y = std::max(camera_->translation_.y,movebleArea_.bottom);
+	camera_->translation_.y = std::min(camera_->translation_.y, movebleArea_.top);
+
 	camera_->UpdateMatrix();
 }
 
