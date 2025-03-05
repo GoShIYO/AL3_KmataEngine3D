@@ -27,11 +27,13 @@ void GameScene::Initialize() {
 	srand(unsigned int(time(nullptr)));
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 	camera_.Initialize();
-	model_ = Model::Create();
+	model_ = Model::CreateFromOBJ("player", true);
+	modelBlock_ = Model::Create();
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
-	textureHandle_ = TextureManager::Load("uvChecker.png");
+	playerTextureHandle_ = TextureManager::Load("./Resources/player/head.png");
+	blockTextureHandle_ = TextureManager::Load("block.png");
 	player_ = new Player();
-	player_->Initialize(model_, textureHandle_, &camera_);
+	player_->Initialize(model_, playerTextureHandle_, &camera_);
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_, &camera_);
 	mapChipField_ = new MapChipField();
@@ -55,7 +57,13 @@ void GameScene::Update() {
 			worldTransformBlock->TransferMatrix();
 		}
 	}
-
+	WorldTransform& playerWorldTransform = player_->GetWorldTransform();
+	playerWorldTransform.matWorld_ = {
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 
+		2.0f, 2.0f, 0.0f, 1.0f};
+	playerWorldTransform.TransferMatrix();
 	player_->Update();
 	skydome_->Update();
 #ifdef _DEBUG
@@ -111,7 +119,7 @@ void GameScene::Draw() {
 			if (!worldTransformBlock) {
 				continue;
 			}
-			model_->Draw(*worldTransformBlock, camera_);
+			modelBlock_->Draw(*worldTransformBlock, camera_,blockTextureHandle_);
 		}
 	}
 
