@@ -46,8 +46,11 @@ private: // メンバ変数
 	/// </summary>
 	Player* player_ = nullptr;
 	Skydome* skydome_ = nullptr;
-	uint32_t textureHandle_ = 0;
+	uint32_t playerTextureHandle_ = 0;
+	uint32_t blockTextureHandle_ = 0;
+
 	Model* model_ = nullptr;
+	Model* modelBlock_ = nullptr;
 	Model* modelSkydome_ = nullptr;
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 	DebugCamera* debugCamera_ = nullptr;

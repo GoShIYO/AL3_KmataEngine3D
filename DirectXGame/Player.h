@@ -20,7 +20,7 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw();
-
+	WorldTransform& GetWorldTransform() { return worldTransform_; }
 private:
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
